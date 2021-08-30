@@ -4,21 +4,18 @@ class Enigma < Formula
   url "https://github.com/Enigma-Game/Enigma/releases/download/1.30/Enigma-1.30-src.tar.gz"
   sha256 "ae64b91fbc2b10970071d0d78ed5b4ede9ee3868de2e6e9569546fc58437f8af"
   license "GPL-2.0-or-later"
-  revision 1
 
   livecheck do
     url :stable
-    # This uses the git tag to get version numbers.
-    # Stable releases should be tagged like 1.21.1 or 1.30
     regex(/v?(\d+(?:\.\d+)+)$/i)
   end
 
   bottle do
-    root_url "https://github.com/Enigma-Game/homebrew-enigma/releases/download/enigma-1.30_1"
-    sha256 big_sur:      "3e9122b5f5f5fb39f3d8083d7e97bd77e40201f4db5ded91ba520fce480dc53d"
-    sha256 catalina:     "cc9af7d870ae8ac80a94febb1a0440e8382513be6dba8704356917d12ad9d38a"
-    sha256 mojave:       "22841ba05ef67b8b9e11345dc2a11e5ec36208408488639f6d46af83a0a3607d"
-    sha256 x86_64_linux: "63f862b3d337058eaff45a57c388a6fd485c0e3a0307459bc10747e39b3e55c7"
+    sha256 arm64_big_sur: "5b867b942c96de07f01505e2208cf578f744425346ba180e96ba3d569c4cc15c"
+    sha256 big_sur:       "679839e6002ae198d8f62c1c1379982630fa2173f41b8cf63b7b48b91c606dac"
+    sha256 catalina:      "78472e57abc53c73a637928f6d58b075f387c7e15e140858e4a3b0c59fa1e2ae"
+    sha256 mojave:        "fab7be7e356416ceeb52dd5a078349ef0a40c7f0a2f703ef43c9c7aeeaa1e239"
+    sha256 x86_64_linux:  "7d28c5a21e674b2cbc1627a807370916695ff7feba86230fd4fce2e6cc3cb939"
   end
 
   head do
@@ -40,10 +37,6 @@ class Enigma < Formula
   depends_on "sdl2_ttf"
   depends_on "xerces-c"
 
-  on_linux do
-    depends_on "gcc"
-  end
-
   def install
     system "./autogen.sh" if build.head?
     system "./configure", "--disable-dependency-tracking",
@@ -51,19 +44,6 @@ class Enigma < Formula
                           "--prefix=#{prefix}"
     system "make"
     system "make", "install"
-    system "strip", bin/"enigma"
-    if build.head?
-      system "make", "dist"
-      mkdir_p prefix/"dist" if build.head?
-      dist_tar = Dir["enigma-*.tar.gz"]
-      odie "Unexpected number of artifacts!" if dist_tar.length != 1
-      (prefix/"dist").install dist_tar
-    end
-    mkdir_p prefix/"etc"
-    (prefix/"etc").install "etc/enigmabuilddmg"
-    (prefix/"etc").install "etc/Info.plist"
-    (prefix/"etc").install "etc/enigma.icns"
-    (prefix/"etc").install "etc/menu_bg.jpg"
   end
 
   test do
