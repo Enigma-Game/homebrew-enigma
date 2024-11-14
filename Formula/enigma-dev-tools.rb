@@ -16,8 +16,6 @@ class EnigmaDevTools < Formula
     regex(/v?(\d+(?:\.\d+)+)$/i)
   end
 
-  bottle :unneeded
-
   depends_on "coreutils"
   depends_on "create-dmg"
   depends_on "dylibbundler"
